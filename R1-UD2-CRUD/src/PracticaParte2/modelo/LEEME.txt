@@ -1,0 +1,18 @@
+En las prácticas anteriores hemos visto cómo guardar y recuperar los datos de una agenda de contactos del almacenamiento secundario persistente. Lo hemos hecho trabajando con los fichero de forma secuencial, ya sea leyéndolos de principio o fin, o escribiendo (sobre-escribiendo) todo el archivo. Este método es muy flexible pero tiene las siguientes desventajas:
+    • Si solo guardamos los datos antes de terminar el programa, corremos el riesgo de perder los datos modificados si cualquier problema hace que el programa termine abruptamente (apagado del ordenador sin cerrar el programa, por ejemplo)
+    • Si guardamos todos los datos cada vez que borramos/añadimos o modificamos un contacto, el tráfico de E/S con el almacenamiento secundario puede penalizar el rendimiento de nuestro programa si se trata de muchos contactos.
+Una solución es trabajar con los fichero de forma aleatoria, pudiendo sobre-escribir solo una pequeña parte del archivo. Para ello usaremos la clase RandomAccessFile, que nos permite tanto leer como escribir en un archivo y en cualquier posición. No obstante nos va a generar los siguientes inconvenientes:
+    • Para poder localizar donde está cada Contacto dentro del fichero, necesitamos que cada uno tenga una longitud fija en el disco. Trabajaremos con Registros de tamaño fijo. Esto hace que si mañana añadimos campos a la clase Contacto, tengamos que rehacer los ficheros (no hay compatibilidad hacia atrás)
+    • Necesitaremos mantener una correlación entre cada Contacto y su posición en el archivo en almacenamiento secundario mediante un número de registro.
+
+En el PDF de Fernando Berzal sobre E/S tenéis un apartado dedicado a los ficheros de acceso aleatorio. Vamos a explorar otras estrategias para ver las distintas posibilidades. Así, nuestro nuevo programa tendrá la siguiente estructura:
+    • Clase Contacto: la utilizada en prácticas anteriores, que implemente Comparable y tenga un equals y hashCode para considerar duplicados los que tengan el mismo nombre.
+    • Clase RegistroContacto: con métodos estáticos para convertir un Contacto en array de bytes y viceversa.
+    • Clase Agenda: mantiene un mapa para poder buscar contactos por nombre y realizar las operaciones de añadir, borrar y modificar un Contacto.
+    • Clase FicheroAgenda: se encarga de leer los contactos del almacenamiento y actualizarlos en disco cada vez que se actualicen en memoria. Agenda conteniene una instancia de esta clase y llama a los métodos para leer y actualizar registros. Igualmente esta clase mantiene un mapa con la relación entre cada Contacto y su posición (número de registro) en el disco y una lista de posiciones libres, ya que al borrar un elemento no podemos contraer el archivo si no reutilizar las posiciones libres. También tenemos que conocer la estructura de Contacto y fijar el tamaño de registro.
+    • Clase PruebaFicheroAgenda: el programa principal (paquete control y método main) que nos permita consultar, listar y modificar la agenda desde la consola.
+
+
+Cambios respecto a V0:
+toLowerCase en Comparator, Equals y Mapa para no duplicar contactos solo por mayúsculas/minúscula
+
