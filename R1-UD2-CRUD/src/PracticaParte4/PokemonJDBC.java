@@ -135,7 +135,7 @@ public class PokemonJDBC implements IRegion, IPokemon {
     }
 
     @Override
-    public boolean eliminarRegion(int gen) {
+    public boolean eliminar(int gen) {
         String sql = "DELETE FROM pokedex WHERE gen = ?";
         String sql2 = "DELETE FROM regiones WHERE NumGen = ?";
         try (Connection conn = conectar();
@@ -157,7 +157,7 @@ public class PokemonJDBC implements IRegion, IPokemon {
     }
 
     @Override
-    public boolean eliminarPokemon(String nombre) {
+    public boolean eliminar(String nombre) {
         String sql = "DELETE FROM pokedex WHERE nombre = ?";
 
         try (Connection conn = conectar();

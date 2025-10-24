@@ -10,7 +10,7 @@ public interface IPokemon {
 
         public boolean modificarPokemon(Pokemon pokemon, Region region);
 
-        public boolean eliminarPokemon(String nombre);
+        public boolean eliminar(String nombre);
 
         public boolean crear(Pokemon pokemon);
 

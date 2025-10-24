@@ -171,7 +171,7 @@ public class VentanaPokemon extends JFrame implements ActionListener {
                 break;
 
             case "ELIMINAR":
-                eliminarPokemon();
+                eliminar();
                 break;
         }
     }
@@ -292,19 +292,45 @@ public class VentanaPokemon extends JFrame implements ActionListener {
         }
     }
 
-    private void eliminarPokemon() {
-        String nombre = textFieldNombre.getText();
-        if (nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Introduce el nombre del Pokémon a eliminar.");
-            return;
-        }
+    private void eliminar() {
+        String tipoSeleccionado = (String) comboTipoCarga.getSelectedItem();
 
-        boolean ok = pokemonJDBC.eliminarPokemon(nombre);
-        if (ok) {
-            JOptionPane.showMessageDialog(this, "Pokémon eliminado correctamente.");
-            cargarPokemons();
-        } else {
-            JOptionPane.showMessageDialog(this, "No se pudo eliminar el Pokémon.");
+        try {
+            if ("Pokémon".equals(tipoSeleccionado)) {
+                String nombre = textFieldNombre.getText().trim();
+                if (nombre.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Introduce el nombre del Pokémon a eliminar.");
+                    return;
+                }
+
+                boolean ok = pokemonJDBC.eliminar(nombre);
+                if (ok) {
+                    JOptionPane.showMessageDialog(this, "Pokémon eliminado correctamente.");
+                    cargarPokemons();
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se pudo eliminar el Pokémon.");
+                }
+
+            } else if ("Región".equals(tipoSeleccionado)) {
+                String genText = textFieldGen.getText().trim();
+                if (genText.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Introduce el número de generación de la Región a eliminar.");
+                    return;
+                }
+
+                int gen = Integer.parseInt(genText);
+                boolean ok = pokemonJDBC.eliminar(gen);
+                if (ok) {
+                    JOptionPane.showMessageDialog(this, "Región eliminada correctamente.");
+                    modeloLista.clear(); // limpiar lista
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se pudo eliminar la Región.");
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage());
         }
     }
+
 }

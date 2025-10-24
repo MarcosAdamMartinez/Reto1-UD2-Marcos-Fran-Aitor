@@ -8,7 +8,7 @@ public interface IRegion {
 
     public Region getRegionPorNombre(String nombre);
 
-    public boolean eliminarRegion(int gen);
+    public boolean eliminar(int gen);
 
     public boolean crear(Region region);
 
