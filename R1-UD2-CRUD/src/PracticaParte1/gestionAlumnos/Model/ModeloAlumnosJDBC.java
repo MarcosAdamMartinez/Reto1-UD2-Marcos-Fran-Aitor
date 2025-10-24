@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ModeloAlumnosJDBC implements IModeloAlumnos {
 
-	private static String cadenaConexion = "jdbc:mysql://localhost:3306/instituto";
+	private static String cadenaConexion = "jdbc:mysql://localhost:3306/adat";
 	private static String user = "dam2";
 	private static String pass = "asdf.1234";
 

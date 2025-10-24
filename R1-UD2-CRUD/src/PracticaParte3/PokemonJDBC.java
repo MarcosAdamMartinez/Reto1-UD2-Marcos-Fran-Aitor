@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PokemonJDBC implements IPokemon{
 
-    private static String cadenaConexion = "jdbc:mysql://localhost:3306/mundoPokemon";
+    private static String cadenaConexion = "jdbc:mysql://localhost:3306/adat1";
     private static String user = "dam2";
     private static String pass = "asdf.1234";
 
@@ -35,7 +35,7 @@ public class PokemonJDBC implements IPokemon{
 
             while (rs.next()) {
                 String pokemonStr = rs.getString("nombre") + " - "
-                        + rs.getString("nivel") + " "
+                        + rs.getString("nivel") + "    "
                         + rs.getString("tipo1") + " / "
                         + rs.getString("tipo2");
                 pokemon.add(pokemonStr);
@@ -73,7 +73,7 @@ public class PokemonJDBC implements IPokemon{
 
     @Override
     public boolean modificarPokemon(Pokemon pokemon) {
-        String sql = "UPDATE pokemon SET nombre = ?, nivel = ?, tipo1 = ?, tipo2 = ? WHERE nombre = ?";
+        String sql = "UPDATE pokedex SET nombre = ?, nivel = ?, tipo1 = ?, tipo2 = ? WHERE nombre = ?";
 
         try (Connection conn = conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -82,6 +82,7 @@ public class PokemonJDBC implements IPokemon{
             ps.setInt(2, pokemon.getNivel());
             ps.setString(3, pokemon.getTipo1());
             ps.setString(4, pokemon.getTipo2());
+            ps.setString(5, pokemon.getNombre());
 
             return ps.executeUpdate() > 0;
 
@@ -90,7 +91,6 @@ public class PokemonJDBC implements IPokemon{
             return false;
         }
     }
-
     @Override
     public boolean eliminarPokemon(String nombre) {
         String sql = "DELETE FROM pokedex WHERE nombre = ?";
@@ -110,7 +110,7 @@ public class PokemonJDBC implements IPokemon{
 
     @Override
     public boolean crearPokemon(Pokemon pokemon) {
-        String sql = "INSERT INTO alumnos (dni, nombre, apellidos, cp) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO pokedex (nombre, nivel, tipo1, tipo2) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
